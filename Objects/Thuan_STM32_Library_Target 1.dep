@@ -1,0 +1,44 @@
+Dependencies for Project 'Thuan_STM32_Library', Target 'Target 1': (DO NOT MODIFY !)
+CompilerVersion: 5060750::V5.06 update 6 (build 750)::ARMCC
+F (.\main.c)(0x66E6BA50)(--gnu -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections-I.\RTE\_Target_1-I"D:\Phanmemhoctap\[Phanmem123.com] Keil C µVision 5 ARM MDK538a\ARM\CMSIS\5.9.0\CMSIS\Core\Include"-I"D:\Phanmemhoctap\[Phanmem123.com] Keil C µVision 5 ARM MDK538a\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="538" -D_RTE_ -DSTM32F407xx -D_RTE_-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
+I (Thuan_STM32F407VGTx_Driver.h)(0x66E6BAA4)
+I (Peripheral/GPIO/GPIO.h)(0x669F6C19)
+I (D:\Phanmemhoctap\[Phanmem123.com] Keil C ÂµVision 5 ARM MDK538a\ARM\ARMCC\include\stdio.h)(0x00000000)
+I (D:\Phanmemhoctap\[Phanmem123.com] Keil C ÂµVision 5 ARM MDK538a\ARM\ARMCC\include\stdint.h)(0x00000000)
+I (Peripheral/RCC/RCC.h)(0x668D2B04)
+I (Peripheral/SystemTimer/Systick.h)(0x669A08F3)
+I (Peripheral/NVIC/NVIC.h)(0x66A1F78C)
+I (Peripheral/SystemControlBLock/SCB.h)(0x6693D7F1)
+I (Peripheral/Timer/Timer.h)(0x66A31D95)
+I (Peripheral/USART/USART.h)(0x66E29299)
+I (D:\Phanmemhoctap\[Phanmem123.com] Keil C ÂµVision 5 ARM MDK538a\ARM\ARMCC\include\stdbool.h)(0x00000000)
+F (.\Peripheral\GPIO\GPIO.c)(0x66A07405)(--gnu -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections-I.\RTE\_Target_1-I"D:\Phanmemhoctap\[Phanmem123.com] Keil C µVision 5 ARM MDK538a\ARM\CMSIS\5.9.0\CMSIS\Core\Include"-I"D:\Phanmemhoctap\[Phanmem123.com] Keil C µVision 5 ARM MDK538a\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="538" -D_RTE_ -DSTM32F407xx -D_RTE_-o .\objects\gpio.o --omf_browse .\objects\gpio.crf --depend .\objects\gpio.d)
+I (Peripheral\GPIO\GPIO.h)(0x669F6C19)
+I (D:\Phanmemhoctap\[Phanmem123.com] Keil C ÂµVision 5 ARM MDK538a\ARM\ARMCC\include\stdio.h)(0x00000000)
+I (D:\Phanmemhoctap\[Phanmem123.com] Keil C ÂµVision 5 ARM MDK538a\ARM\ARMCC\include\stdint.h)(0x00000000)
+F (.\Peripheral\RCC\RCC.c)(0x668D5012)(--gnu -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections-I.\RTE\_Target_1-I"D:\Phanmemhoctap\[Phanmem123.com] Keil C µVision 5 ARM MDK538a\ARM\CMSIS\5.9.0\CMSIS\Core\Include"-I"D:\Phanmemhoctap\[Phanmem123.com] Keil C µVision 5 ARM MDK538a\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="538" -D_RTE_ -DSTM32F407xx -D_RTE_-o .\objects\rcc.o --omf_browse .\objects\rcc.crf --depend .\objects\rcc.d)
+I (Peripheral\RCC\RCC.h)(0x668D2B04)
+I (D:\Phanmemhoctap\[Phanmem123.com] Keil C ÂµVision 5 ARM MDK538a\ARM\ARMCC\include\stdio.h)(0x00000000)
+I (D:\Phanmemhoctap\[Phanmem123.com] Keil C ÂµVision 5 ARM MDK538a\ARM\ARMCC\include\stdint.h)(0x00000000)
+F (.\Peripheral\NVIC\NVIC.c)(0x6692B059)(--gnu -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections-I.\RTE\_Target_1-I"D:\Phanmemhoctap\[Phanmem123.com] Keil C µVision 5 ARM MDK538a\ARM\CMSIS\5.9.0\CMSIS\Core\Include"-I"D:\Phanmemhoctap\[Phanmem123.com] Keil C µVision 5 ARM MDK538a\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="538" -D_RTE_ -DSTM32F407xx -D_RTE_-o .\objects\nvic.o --omf_browse .\objects\nvic.crf --depend .\objects\nvic.d)
+I (Peripheral\NVIC\NVIC.h)(0x66A1F78C)
+I (D:\Phanmemhoctap\[Phanmem123.com] Keil C ÂµVision 5 ARM MDK538a\ARM\ARMCC\include\stdio.h)(0x00000000)
+I (D:\Phanmemhoctap\[Phanmem123.com] Keil C ÂµVision 5 ARM MDK538a\ARM\ARMCC\include\stdint.h)(0x00000000)
+F (.\Peripheral\USART\USART.c)(0x66E672B5)(--gnu -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections-I.\RTE\_Target_1-I"D:\Phanmemhoctap\[Phanmem123.com] Keil C µVision 5 ARM MDK538a\ARM\CMSIS\5.9.0\CMSIS\Core\Include"-I"D:\Phanmemhoctap\[Phanmem123.com] Keil C µVision 5 ARM MDK538a\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="538" -D_RTE_ -DSTM32F407xx -D_RTE_-o .\objects\usart.o --omf_browse .\objects\usart.crf --depend .\objects\usart.d)
+I (Peripheral\USART\USART.h)(0x66E29299)
+I (D:\Phanmemhoctap\[Phanmem123.com] Keil C ÂµVision 5 ARM MDK538a\ARM\ARMCC\include\stdio.h)(0x00000000)
+I (D:\Phanmemhoctap\[Phanmem123.com] Keil C ÂµVision 5 ARM MDK538a\ARM\ARMCC\include\stdint.h)(0x00000000)
+I (D:\Phanmemhoctap\[Phanmem123.com] Keil C ÂµVision 5 ARM MDK538a\ARM\ARMCC\include\math.h)(0x00000000)
+I (Peripheral\USART\../GPIO/GPIO.h)(0x669F6C19)
+I (Peripheral\USART\../RCC/RCC.h)(0x668D2B04)
+F (RTE/Device/STM32F407VGTx/startup_stm32f407xx.s)(0x637457FA)(--cpu Cortex-M4.fp.sp -g --apcs=interwork -I.\RTE\_Target_1-I"D:\Phanmemhoctap\[Phanmem123.com] Keil C µVision 5 ARM MDK538a\ARM\CMSIS\5.9.0\CMSIS\Core\Include"-I"D:\Phanmemhoctap\[Phanmem123.com] Keil C µVision 5 ARM MDK538a\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include"--pd "__UVISION_VERSION SETA 538" --pd "_RTE_ SETA 1" --pd "STM32F407xx SETA 1" --pd "_RTE_ SETA 1"--list .\listings\startup_stm32f407xx.lst --xref -o .\objects\startup_stm32f407xx.o --depend .\objects\startup_stm32f407xx.d)
+F (RTE/Device/STM32F407VGTx/system_stm32f4xx.c)(0x637457FA)(--gnu -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections-I.\RTE\_Target_1-I"D:\Phanmemhoctap\[Phanmem123.com] Keil C µVision 5 ARM MDK538a\ARM\CMSIS\5.9.0\CMSIS\Core\Include"-I"D:\Phanmemhoctap\[Phanmem123.com] Keil C µVision 5 ARM MDK538a\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="538" -D_RTE_ -DSTM32F407xx -D_RTE_-o .\objects\system_stm32f4xx.o --omf_browse .\objects\system_stm32f4xx.crf --depend .\objects\system_stm32f4xx.d)
+I (D:\Phanmemhoctap\[Phanmem123.com] Keil C ÂµVision 5 ARM MDK538a\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x00000000)
+I (D:\Phanmemhoctap\[Phanmem123.com] Keil C ÂµVision 5 ARM MDK538a\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f407xx.h)(0x00000000)
+I (D:\Phanmemhoctap\[Phanmem123.com] Keil C ÂµVision 5 ARM MDK538a\ARM\CMSIS\5.9.0\CMSIS\Core\Include\core_cm4.h)(0x00000000)
+I (D:\Phanmemhoctap\[Phanmem123.com] Keil C ÂµVision 5 ARM MDK538a\ARM\ARMCC\include\stdint.h)(0x00000000)
+I (D:\Phanmemhoctap\[Phanmem123.com] Keil C ÂµVision 5 ARM MDK538a\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_version.h)(0x00000000)
+I (D:\Phanmemhoctap\[Phanmem123.com] Keil C ÂµVision 5 ARM MDK538a\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_compiler.h)(0x00000000)
+I (D:\Phanmemhoctap\[Phanmem123.com] Keil C ÂµVision 5 ARM MDK538a\ARM\CMSIS\5.9.0\CMSIS\Core\Include\cmsis_armcc.h)(0x00000000)
+I (D:\Phanmemhoctap\[Phanmem123.com] Keil C ÂµVision 5 ARM MDK538a\ARM\CMSIS\5.9.0\CMSIS\Core\Include\mpu_armv7.h)(0x00000000)
+I (D:\Phanmemhoctap\[Phanmem123.com] Keil C ÂµVision 5 ARM MDK538a\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x00000000)
