@@ -1,0 +1,24 @@
+{
+    "files.associations": {
+        "stdio.h": "c",
+        "Thuan_STM32F407VGTx_Driver.h": "c",
+        "address_registers.h": "c",
+        "gpio.h": "c",
+        "rcc.h": "c",
+        "systick.h": "c",
+        "exti.h": "c",
+        "nvic.h": "c",
+        "scb.h": "c",
+        "interrupt_handler.h": "c",
+        "usart.h": "c",
+        "math.h": "c",
+        "timer.h": "c",
+        "stdint.h": "c",
+        "type_traits": "c",
+        "spi.h": "c",
+        "limits": "c",
+        "i2c.h": "c",
+        "soft_i2c.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "disabled"
+}

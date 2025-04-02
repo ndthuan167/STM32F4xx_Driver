@@ -1,0 +1,89 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: µVision V5.38.0.0
+Copyright (C) 2022 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: Nguyen Dinh Thuan, HCMUT, LIC=RC93N-YSTY0-LQX0Q-NM0TU-6WJZ9-CG2GM
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Plus  Version: 5.38.0.0
+Toolchain Path:  D:\Phanmemhoctap\[Phanmem123.com] Keil C µVision 5 ARM MDK538a\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 6 (build 750)
+Assembler:       Armasm.exe V5.06 update 6 (build 750)
+Linker/Locator:  ArmLink.exe V5.06 update 6 (build 750)
+Library Manager: ArmAr.exe V5.06 update 6 (build 750)
+Hex Converter:   FromElf.exe V5.06 update 6 (build 750)
+CPU DLL:         SARMCM3.DLL V5.38.0.0
+Dialog DLL:      DARMSTM.DLL V1.69.1.0
+Target DLL:      UL2CM3.DLL V1.164.8.0
+Dialog DLL:      TCM.DLL V1.56.4.0
+ 
+<h2>Project:</h2>
+D:\MyCode\STM32_Library\Thuan_STM32_Library.uvprojx
+Project File Date:  04/02/2025
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.06 update 6 (build 750)', folder: 'D:\Phanmemhoctap\[Phanmem123.com] Keil C µVision 5 ARM MDK538a\ARM\ARMCC\Bin'
+Rebuild target 'Target 1'
+compiling SCB.c...
+compiling GPIO.c...
+compiling Systick.c...
+compiling SPI.c...
+Peripheral\SPI\SPI.c(232): warning:  #550-D: variable "temp"  was set but never used
+  	uint8_t temp = spi_n->DR;
+Peripheral\SPI\SPI.c: 1 warning, 0 errors
+compiling NVIC.c...
+compiling EXTI.c...
+compiling RCC.c...
+compiling IRQ_Handler.c...
+compiling Timer.c...
+compiling USART.c...
+compiling main.c...
+assembling startup_stm32f407xx.s...
+compiling LCD_I2C.c...
+compiling I2C.c...
+Peripheral\I2C\I2C.c(329): warning:  #550-D: variable "data_buffer"  was set but never used
+      uint16_t data_buffer[NumOfBytes];
+Peripheral\I2C\I2C.c: 1 warning, 0 errors
+compiling Soft_I2C.c...
+compiling system_stm32f4xx.c...
+linking...
+Program Size: Code=7252 RO-data=424 RW-data=304 ZI-data=1632  
+FromELF: creating hex file...
+".\Objects\Thuan_STM32_Library.axf" - 0 Error(s), 2 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: ARM
+                http://www.keil.com/pack/ARM.CMSIS.5.9.0.pack
+                ARM.CMSIS.5.9.0
+                CMSIS (Common Microcontroller Software Interface Standard)
+   * Component: CORE Version: 5.6.0
+
+Package Vendor: Keil
+                https://www.keil.com/pack/Keil.STM32F4xx_DFP.2.17.1.pack
+                Keil.STM32F4xx_DFP.2.17.1
+                STMicroelectronics STM32F4 Series Device Support, Drivers and Examples
+   * Component: Startup Version: 2.6.3
+
+<h2>Collection of Component include folders:</h2>
+  ./RTE/_Target_1
+  D:/Phanmemhoctap/[Phanmem123.com] Keil C µVision 5 ARM MDK538a/ARM/CMSIS/5.9.0/CMSIS/Core/Include
+  D:/Phanmemhoctap/[Phanmem123.com] Keil C µVision 5 ARM MDK538a/Keil/STM32F4xx_DFP/2.17.1/Drivers/CMSIS/Device/ST/STM32F4xx/Include
+
+<h2>Collection of Component Files used:</h2>
+
+   * Component: ARM::CMSIS:CORE:5.6.0
+
+   * Component: Keil::Device:Startup:2.6.3
+      Include file:  Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
+      Source file:   Drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates/arm/startup_stm32f407xx.s
+      Source file:   MDK/Device/Source/ARM/STM32F4xx_OTP.s
+      Source file:   MDK/Device/Source/ARM/STM32F40xxx_41xxx_OPT.s
+      Source file:   Drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates/system_stm32f4xx.c
+Build Time Elapsed:  00:00:02
+</pre>
+</body>
+</html>
