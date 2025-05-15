@@ -250,10 +250,10 @@ uint32_t *const stm32f4xx_vectors_table[] = {
 void Reset_Handler(void)
 {
     // Copy the main function from Flash to RAM
-    extern uint32_t start_data_in_flash; // Start address of the main function in Flash memory <- PROVIDE(start_data_in_flash = LOADADDR(.text));
-    extern uint32_t end_data_in_flash;   // End address of the main function in Flash memory <- PROVIDE(end_data_in_flash = LOADADDR(.text) + SIZEOF(.text));
-    extern uint32_t start_data_in_RAM; // Start address of the main function in RAM <- PROVIDE(start_data_in_RAM = LOADADDR(.data));
-    extern uint32_t end_data_in_RAM;   // End address of the main function in RAM   <- PROVIDE(start_data_in_RAM = LOADADDR(.data) + SIZEOF(.data));
+    extern uint32_t start_data_in_flash; // Start address of the main function in Flash memory <- PROVIDE(start_data_in_flash = LOADADDR(.data));
+    extern uint32_t end_data_in_flash;   // End address of the main function in Flash memory   <- PROVIDE(end_data_in_flash = LOADADDR(.data) + SIZEOF(.data));
+    extern uint32_t start_data_in_RAM; // Start address of the main function in RAM <- PROVIDE(start_data_in_RAM = ADDR(.data));
+    extern uint32_t end_data_in_RAM;   // End address of the main function in RAM   <- PROVIDE(end_data_in_RAM = ADDR(.data) + SIZEOF(.data));
 
     uint32_t *pData_in_falsh = &start_data_in_flash; // Pointer to the start of the main function in Flash memory
     uint32_t *pData_in_RAM = &start_data_in_RAM; // Pointer to the start of the main function in RAM
@@ -264,8 +264,8 @@ void Reset_Handler(void)
     }
 
     // Initialize the bss section in RAM
-    extern uint32_t start_bss_in_RAM; // Start address of the bss section in RAM   <- PROVIDE(start_bss_in_RAM = LOADADDR(.bss));
-    extern uint32_t end_bss_in_RAM;   // End address of the bss section in RAM  <- PROVIDE(end_bss_in_RAM = LOADADDR(.bss) + SIZEOF(.bss));
+    extern uint32_t start_bss_in_RAM; // Start address of the bss section in RAM   <- PROVIDE(start_bss_in_RAM = ADDR(.bss));
+    extern uint32_t end_bss_in_RAM;   // End address of the bss section in RAM     <- PROVIDE(end_bss_in_RAM = ADDR(.bss) + SIZEOF(.bss));
 
     uint32_t *pBss_in_RAM = &start_bss_in_RAM; // Pointer to the start of the bss section in RAM
     while (pBss_in_RAM < &end_bss_in_RAM)
