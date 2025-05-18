@@ -1,7 +1,7 @@
 /**
  * @file GPIO.c
  * @author Nguyen Dinh Thuan (thuan.nd.167@gmail.com)
- * @brief Configuration for SPI (Serial Peripheral Interface) of STM32F407VGTx (ARMCortex M4)
+ * @brief Configuration for SPI (Serial Peripheral Interface) of STM32F4xx (ARMCortex M4)
  * @date 2025-03-04
  *
  */
@@ -13,6 +13,7 @@
 #include "SPI.h"
 #include "../RCC/RCC.h"
 #include "../GPIO/GPIO.h"
+#include "../DMA/DMA.h"
 
 /******************************************************************************
  * Variables definition
@@ -89,9 +90,7 @@ void SPI_ConfigGPIOPinForSPI(SPIn * spi_n)
 
 /**
 * @ Name : SPI_Configuration
-* @ Parameters: SPIn *spi_n,uint8_t spi_mode, uint8_t sampling_type,
-    uint8_t clock_prescaler, uint8_t data_read_fr, 
-    uint8_t receive_mode, uint8_t data_fr, uint8_t slave_mode_type
+* @ Parameters: SPI_Config_Variables SPI_Val
 * @ Registers :
 * @ Descriptions :
 *		- Config SPI mode:
@@ -122,29 +121,28 @@ void SPI_ConfigGPIOPinForSPI(SPIn * spi_n)
     6. Config type of trigger slave select is software of hardware
     7. If you want select type of SPI is Texas -> Enable TI mode
 */
-void SPI_Configuration(SPIn *spi_n,uint8_t spi_mode, uint8_t sampling_type,
-    uint8_t clock_prescaler, uint8_t data_read_fr, 
-    uint8_t receive_mode, uint8_t data_fr, uint8_t slave_mode_type)
+void SPI_Configuration(SPI_Config_Variables SPI_Val)
+
 {
-    SPI_ConfigGPIOPinForSPI(spi_n);
-    SET_MASTER_SELECT(spi_n, spi_mode);
-    SET_DATA_FRAME(spi_n, data_fr);
-    SET_SAMPLING_TYPE_WITH_CLOCK(spi_n, sampling_type);
-    SET_FRAME_FORMAT(spi_n, data_read_fr);
+    SPI_ConfigGPIOPinForSPI(SPI_Val.spi_x);
+    SET_MASTER_SELECT(SPI_Val.spi_x, SPI_Val.spi_mode);
+    SET_DATA_FRAME(SPI_Val.spi_x, SPI_Val.data_fr);
+    SET_SAMPLING_TYPE_WITH_CLOCK(SPI_Val.spi_x, SPI_Val.sampling_type);
+    SET_FRAME_FORMAT(SPI_Val.spi_x, SPI_Val.data_read_fr);
 
-    if(spi_mode!= SLAVE_MODE)      // Slave mode, clock is provided from master
-        SET_CLOCK_DIVIDER(spi_n, clock_prescaler);
+    if(SPI_Val.spi_mode!= SLAVE_MODE)      // Slave mode, clock is provided from master
+        SET_CLOCK_DIVIDER(SPI_Val.spi_x, SPI_Val.clock_prescaler);
 
-    if(slave_mode_type == SOFTWARE_SLAVE_SELECT)
-        SET_SOFTWARE_SLAVE_MANAGEMENT(spi_n);
-    else if(slave_mode_type == HARDWARE_SLAVE_SELECT)
-        SET_ENABLE_HARDWARE_NSS(spi_n);
-    else if (slave_mode_type == NOTHING)
+    if(SPI_Val.slave_mode_type == SOFTWARE_SLAVE_SELECT)
+        SET_SOFTWARE_SLAVE_MANAGEMENT(SPI_Val.spi_x);
+    else if(SPI_Val.slave_mode_type == HARDWARE_SLAVE_SELECT)
+        SET_ENABLE_HARDWARE_NSS(SPI_Val.spi_x);
+    else if (SPI_Val.slave_mode_type == NOTHING)
     {
         // nothing
     }
-    SET_RECEIVE_MODE(spi_n, receive_mode);
-    ENABLE_SPI(spi_n);
+    SET_RECEIVE_MODE(SPI_Val.spi_x, SPI_Val.receive_mode);
+    ENABLE_SPI(SPI_Val.spi_x);
 }
 
 /**
@@ -236,6 +234,48 @@ void SPI_Transmiter(SPIn *spi_n, uint8_t *pData, uint8_t Size)
 
 /**
 *******************************************************************************
+* @ Name : SPI_Transmiter_DMA
+* @ Parameters: SPIn * spi_n, uint8_t* pData, uint8_t Size
+* @ Registers : DMA registers, DR
+* @ Descriptions :
+*		- Send data via spi by using DMA confirguration:
+*            + Set DMA direction: Memory to Peripheral
+*            + Set Peripheral address: spin->DR
+*            + Set Memory address: pData
+*            + Set Number of data: Size
+* @ Return value : void
+* @ author : Nguyen Dinh Thuan(thuan.nd.167@gmail.com)
+* @ date : 2025-05-17
+*******************************************************************************
+*/
+void SPI_Transmiter_DMA(SPIn * spi_n, uint8_t* pData, uint8_t Size)
+{
+    DMA_Variables DMA_val;
+    if (spi_n == (SPIn *)ADDRESS_SPI_1)
+        DMA_val.Peripheral = SPI1_TX;
+    else if (spi_n == (SPIn *)ADDRESS_SPI_2)
+        DMA_val.Peripheral = SPI2_TX;
+    else if (spi_n == (SPIn *)ADDRESS_SPI_3)
+        DMA_val.Peripheral = SPI3_TX;
+
+    DMA_val.Direction = DIR_MEM2PHE;
+    DMA_val.MemDataSize = PDATA_SIZE_WORD;
+    DMA_val.PheDataSize = PDATA_SIZE_WORD;
+    DMA_val.PriorityLevel = PL_HIGH;
+    DMA_val.NumOfData = Size;
+    DMA_val.Memory0Address = (uint32_t)pData;
+    DMA_val.Memory1Address = (uint32_t)pData;
+    DMA_val.PeripheralAddress = (uint32_t)&spi_n->DR;
+    DMA_val.FIFOEnable = DISABLE;
+    DMA_Configuration(DMA_val);
+
+    DMA_Request rq = GetStreamAndChannelForPeripheral(DMA_val.Peripheral);
+    DMA_TRANSFER_COMPLETE_IRQ_ENABLE(rq.DMAn, rq.StreamX);
+    DMA_EnableStream(DMA_val);
+}
+
+/**
+*******************************************************************************
 * @ Name : SPI_ReceiveData
 * @ Parameters: SPIn *spi_n, uint8_t *pData, uint8_t Size
 * @ Registers :
@@ -264,6 +304,55 @@ void SPI_ReceiveData(SPIn *spi_n, uint8_t *pData, uint8_t Size)
         *pData++ = SPI_GET_DATA_REGISTER(spi_n);
         Size--;
     }
+}
+
+/**
+*******************************************************************************
+* @ Name : SPI_ReceiveData_DMA
+* @ Parameters: SPIn *spi_n
+* @ Registers : DMA registers, DR
+* @ Descriptions :
+*		- Receive data via spi by using DMA confirguration:
+*            + Set DMA direction: Peripheral to Memory
+*            + Set Peripheral address: spi_n->DR
+*            + Set Memory address: data_receive
+*            + Set Number of data: 1
+*            + Enable transfer complete interrupt
+* @ Return value : void
+* @ author : Nguyen Dinh Thuan(thuan.nd.167@gmail.com)
+* @ date : 2025-05-17
+*******************************************************************************
+*/
+uint8_t SPI_ReceiveData_DMA(SPIn *spi_n)
+{
+    uint8_t data_receive;
+    DMA_Variables DMA_val;
+    if (spi_n == (SPIn *)ADDRESS_SPI_1)
+        DMA_val.Peripheral = SPI1_RX;
+    else if (spi_n == (SPIn *)ADDRESS_SPI_2)
+        DMA_val.Peripheral = SPI2_RX;
+    else if (spi_n == (SPIn *)ADDRESS_SPI_3)
+        DMA_val.Peripheral = SPI3_RX;
+
+    DMA_val.Direction = DIR_PHE2MEM;
+    DMA_val.MemDataSize = PDATA_SIZE_WORD;
+    DMA_val.PheDataSize = PDATA_SIZE_WORD;
+    DMA_val.PriorityLevel = PL_HIGH;
+    DMA_val.NumOfData = 1;
+    DMA_val.Memory0Address = (uint32_t)&data_receive;
+    DMA_val.Memory1Address = (uint32_t)&data_receive;
+    DMA_val.PeripheralAddress = (uint32_t)&spi_n->DR;
+    DMA_val.FIFOEnable = DISABLE;
+    DMA_Configuration(DMA_val);
+    DMA_EnableStream(DMA_val);
+
+    DMA_Request rq = GetStreamAndChannelForPeripheral(DMA_val.Peripheral);
+    DMA_TRANSFER_COMPLETE_IRQ_ENABLE(rq.DMAn, rq.StreamX);
+    while(!DMA_Get_IRQ_Flag(rq.DMAn, rq.StreamX, DMA_TRANSFER_COMPLETE_IRQ_FLAG))
+    {
+    };
+
+    return data_receive;
 }
 
 void SPI_TransmitDataInterruptEnable(SPIn *spi_n)

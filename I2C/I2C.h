@@ -1,7 +1,7 @@
 /**
  * @file I2C.h
  * @author Nguyen Dinh Thuan (thuan.nd.167@gmail.com)
- * @brief Some declaration for I2C (Inter-Integrated Circuit) configuration of STM32F407VGTx (ARMCortex M4)
+ * @brief Some declaration for I2C (Inter-Integrated Circuit) configuration of STM32F4xx (ARMCortex M4)
  * @date 2025-03-07
  *
  */
@@ -39,6 +39,16 @@ typedef struct
     uint32_t TRISE;       //TRise Register
     uint32_t FLTR;        //FLTR Register
 }I2C;
+
+typedef struct
+{
+    I2C* i2c_x;
+    uint8_t i2c_mode;         // I2C_STANDARD_MODE, I2C_FAST_MODE, I2C_FAST_MODE_PLUS
+    uint32_t peripheral_clock; // 6,8,9,12,16,18,24,28,36
+    uint32_t scl_clock;      // 100kHz, 400kHz
+    uint8_t duty_type;       // I2C_DUTY_2_1, I2C_DUTY_16_9
+} I2C_Config_Variables;
+
 
 /*******************************************************************************
 * DEFINITION
@@ -141,10 +151,13 @@ enum
 #define GET_I2C_DATA(i2c)                       i2c->DR
 
 
+/*******************************************************************************
+ * FUNCTIONS DEFINITION
+ *******************************************************************************/
 void I2C_ConfigGPIOPin(I2C* i2c_x);
 void I2C_ClockPeripheralConfig(I2C* i2c_x);
 void I2C_ConfigI2CClock(I2C* i2c_x, uint8_t i2c_mode, uint32_t peripheral_clock, uint32_t scl_clock, uint8_t duty_type);
-void I2C_Configuration(I2C *i2c_x ,uint8_t i2c_mode, uint32_t peripheral_clock, uint32_t scl_clock, uint8_t duty_type);
+void I2C_Configuration(I2C_Config_Variables I2C_Val);
 void I2C_Start(I2C *i2c_x);
 void I2C_WriteAddress(I2C *i2c_x, uint16_t slave_address);
 void I2C_WriteData(I2C *i2c_x, uint16_t data);
@@ -152,4 +165,6 @@ uint8_t I2C_ReadData(I2C *i2c_x);
 void I2C_ReceiveData(I2C *i2c_x, uint8_t slave_address, uint8_t NumOfBytes);
 void I2C_TransmitData(I2C *i2c_x, uint8_t slave_address, uint8_t *data, uint8_t NumOfBytes);
 
+void I2C_TransmitData_DMA(I2C *i2c_x, uint8_t slave_address, uint8_t *pData, uint8_t NumOfBytes);
+uint32_t I2C_ReceiveData_DMA(I2C *i2c_x);
 

@@ -1,7 +1,7 @@
 /**
  * @file RCC.c
  * @author Nguyen Dinh Thuan (thuan.nd.167@gmail.com)
- * @brief Configuration for External interrupt (EXTI) of STM32F407VGTx (ARMCortex M4)
+ * @brief Configuration for External interrupt (EXTI) of STM32F4xx (ARMCortex M4)
  * @date 2025-02-28
  *
  */

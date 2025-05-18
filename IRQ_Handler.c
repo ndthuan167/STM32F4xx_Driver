@@ -4,6 +4,8 @@
 #include "Peripheral/EXTI/EXTI.h"
 #include "Peripheral/SPI/SPI.h"
 #include "Peripheral/CAN/CAN.h"
+#include "Peripheral/ADC/ADC.h"
+#include "Peripheral/DMA/DMA.h"
 
 /*******************************************************************************
 SYSTICK_HANDLER
@@ -126,3 +128,68 @@ void CAN1_RX1_IRQHandler(void)
 {
 }
 
+
+/*******************************************************************************
+    ADCx_HANDLER
+*******************************************************************************/
+volatile uint32_t data_converted;
+void ADC_IRQHandler(void)
+{
+	ADCx *adc1 = (ADCx *)ADDRESS_ADC_1;
+	
+	if((ADC_GET_CONVERSION_RESULT(adc1)))
+	{
+		data_converted = ADC_GET_RESULT(adc1);
+		ADC_CLEAR_STATUS_REGISTER(adc1);
+	}
+}
+
+/*******************************************************************************
+	DMAx_StreamX_HANDLER
+*******************************************************************************/
+
+// Example for DMA1 Stream 0
+void DMA1_Stream0_IRQHandler(void)
+{
+	DMAx *dma1 = (DMAx *)ADDRESS_DMA1;
+
+	// Check FIFO error
+	if(DMA_Get_IRQ_Flag(dma1, DMA_STREAM0, DMA_FIFO_ERROR_IRQ_FLAG))
+	{
+		// Handle FIFO error
+		/* ...... */
+		DMA_CLEAR_FIFO_ERROR_IRQ_FLAG(dma1, DMA_STREAM0);
+	}
+
+	// Check Direct mode error
+	if(DMA_Get_IRQ_Flag(dma1, DMA_STREAM0, DMA_DIRECT_MODE_ERROR_IRQ_FLAG))
+	{
+		// Handle Direct mode error
+		/* ...... */
+		DMA_CLEAR_DIRECT_MODE_ERROR_IRQ_FLAG(dma1, DMA_STREAM0);
+	}
+
+	// Check Transfer error
+	if(DMA_Get_IRQ_Flag(dma1, DMA_STREAM0, DMA_TRANSFER_ERROR_IRQ_FLAG))
+	{
+		// Handle Transfer error
+		/* ...... */
+		DMA_CLEAR_TRANSFER_ERROR_IRQ_FLAG(dma1, DMA_STREAM0);
+	}
+
+	// Check Half transfer complete
+	if(DMA_Get_IRQ_Flag(dma1, DMA_STREAM0, DMA_HAFT_TRANSFER_COMPLETE_IRQ_FLAG))
+	{
+		// Handle Half transfer complete
+		/* ...... */
+		DMA_CLEAR_HAFT_TRANSFER_COMPLETE_IRQ_FLAG(dma1, DMA_STREAM0);
+	}
+
+	// Check  transfer complete
+	if(DMA_Get_IRQ_Flag(dma1, DMA_STREAM0, DMA_TRANSFER_COMPLETE_IRQ_FLAG))
+	{
+		// Handle transfer complete
+		/* ...... */
+		DMA_CLEAR_TRANSFER_COMPLETE_IRQ_FLAG(dma1, DMA_STREAM0);
+	}
+}

@@ -1,7 +1,7 @@
 /**
  * @file NVIC.c
  * @author Nguyen Dinh Thuan (thuan.nd.167@gmail.com)
- * @brief Configuration for NVIC of STM32F407VGTx (ARMCortex M4)
+ * @brief Configuration for NVIC of STM32F4xx (ARMCortex M4)
  * @date 2024-07-11
  *
  */
@@ -186,7 +186,7 @@ void NVIC_Init(uint8_t IRQNumber)
 /**
 *******************************************************************************
 * @ Name : NVIC_Configuration
-* @ Parameters: uint8_t IRQNumber, uint8_t priority, uint8_t enable
+* @ Parameters: NVIC_Config_Variables NVIC_val
 * @ Registers : NVIC_ISER, NVIC_IPR, NVIC_ICER
 * @ Descriptions :
 *		- Config NVIC for specific IRQNumber:
@@ -198,17 +198,17 @@ void NVIC_Init(uint8_t IRQNumber)
 * @ date : 2024-07-11
 *******************************************************************************
 */
-void NVIC_Configuration(uint8_t IRQNumber, uint8_t priority, uint8_t enable)
+void NVIC_Configuration(NVIC_Config_Variables NVIC_val)
 {
-    NVIC_Init(IRQNumber);
-    if (enable)
+    NVIC_Init(NVIC_val.IRQNumber);
+    if (NVIC_val.IRQEnable)
     {
-        NVIC_SetInterruptEnable(IRQNumber);
-        NVIC_SetPriority(IRQNumber, priority);
+        NVIC_SetInterruptEnable(NVIC_val.IRQNumber);
+        NVIC_SetPriority(NVIC_val.IRQNumber, NVIC_val.IRQPriority);
     }
     else
     {
-        NVIC_ClearInterruptEnable(IRQNumber);
+        NVIC_ClearInterruptEnable(NVIC_val.IRQNumber);
     }
     // NVIC_ClearPendingInterrupt(IRQNumber);
 }

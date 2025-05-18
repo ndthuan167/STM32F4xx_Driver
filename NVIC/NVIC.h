@@ -1,7 +1,7 @@
 /**
  * @file NVIC.h
  * @author Nguyen Dinh Thuan (thuan.nd.167@gmail.com)
- * @brief Some declaration for NVIC of STM32F407VGTx (ARMCortex M4)
+ * @brief Some declaration for NVIC of STM32F4xx (ARMCortex M4)
  * @date 2024-07-11
  *
  */
@@ -27,6 +27,13 @@ typedef struct
     volatile uint32_t reserve[32];
     volatile uint8_t  NVIC_IPR[240];
 } NVIC;
+
+typedef struct
+{
+    uint8_t IRQNumber;
+    uint8_t IRQPriority;
+    uint8_t IRQEnable;
+} NVIC_Config_Variables;
 
 /*******************************************************************************
  * NVIC ADDRESS DEFINITION
@@ -196,6 +203,6 @@ void NVIC_SetPriority(uint8_t IRQNumber, uint8_t priority);
 uint8_t NVIC_GetStatusInterrupt(uint8_t IRQNumber, uint8_t register_read);
 
 void NVIC_Init(uint8_t IRQNumber);
-void NVIC_Configuration(uint8_t IRQNumber, uint8_t priority, uint8_t enable);
+void NVIC_Configuration(NVIC_Config_Variables NVIC_val);
 
 

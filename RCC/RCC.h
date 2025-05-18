@@ -1,7 +1,7 @@
 /**
  * @file RCC.h
  * @author Nguyen Dinh Thuan (thuan.nd.167@gmail.com)
- * @brief Some declaration for Clock configuration (RCC) of STM32F407VGTx (ARMCortex M4)
+ * @brief Some declaration for Clock configuration (RCC) of STM32F4xx (ARMCortex M4)
  * @date 2025-02-27
  *
  */
@@ -16,7 +16,7 @@
  * DEFINITION
  *******************************************************************************/
 
-#define USE_SYSCLK_16MHz
+// #define USE_SYSCLK_16MHz
 // #define USE_SYSCLK_24MHz
 // #define USE_SYSCLK_36MHz
 // #define USE_SYSCLK_48MHz
@@ -165,9 +165,9 @@ enum
     CLOCK_GPIO_G,
     CLOCK_GPIO_H,
     CLOCK_GPIO_I,
-	CLOCK_GPIO_J,
-	CLOCK_GPIO_K,
-	CLOCK_GPIO_CRC,
+	CLOCK_GPIO_CRC = 12,
+	CLOCK_DMA1 = 21,
+	CLOCK_DMA2,
 	CLOCK_TIM2,
 	CLOCK_TIM3,
 	CLOCK_TIM4,

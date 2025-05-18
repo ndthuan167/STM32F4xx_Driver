@@ -1,7 +1,7 @@
 /**
  * @file Timer.c
  * @author Nguyen Dinh Thuan (thuan.nd.167@gmail.com)
- * @brief Configuration for timer of STM32F407VGTx (ARMCortex M4)
+ * @brief Configuration for timer of STM32F4xx (ARMCortex M4)
  * @date 2024-07-19
  *
  */

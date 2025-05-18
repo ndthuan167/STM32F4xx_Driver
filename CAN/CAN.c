@@ -226,7 +226,7 @@ void CAN_MailboxTransmitConfig(CANx *CAN_x, uint8_t Mailbox, uint32_t ID, uint8_
 /**
 *******************************************************************************
 * @ Name : CAN_Configuration
-* @ Parameters: 
+* @ Parameters: CAN_Config_Variables CAN_Val
 * @ Registers : CAN registers
 * @ Descriptions :
 *		- Configure CAN bus with the following process:
@@ -242,42 +242,34 @@ void CAN_MailboxTransmitConfig(CANx *CAN_x, uint8_t Mailbox, uint32_t ID, uint8_
 * @ date : 2025-04-29
 *******************************************************************************
 */
-#if !defined(CAN_SELF_CONFIG_BAUDRATE)
-void CAN_Configuration(CANx *CAN_x, uint32_t Baudrate,    // baudrate
-                        uint8_t Mailbox, uint32_t TX_ID, uint8_t TX_DataLenght,                                     // TX mailbox
-                        uint8_t FilterNumber, uint8_t FilterMode, uint8_t ScaleMode, uint32_t RX_ID, uint32_t ExtraInfor)  // RX filter message
-#else
-void CAN_Configuration(CANx *CAN_x, uint32_t Prescaler, uint8_t TimeSegment1, uint8_t TimeSegment2, uint8_t SJW,    // baudrate
-                        uint8_t Mailbox, uint32_t TX_ID, uint8_t TX_DataLenght,                                     // TX mailbox
-                        uint8_t FilterNumber, uint8_t FilterMode, uint8_t ScaleMode, uint32_t RX_ID, uint32_t ExtraInfor)  // RX filter message
-#endif
+void CAN_Configuration(CAN_Config_Variables CAN_Val)
 {
     // Config GPIO for CANx
-    CAN_ConfigGPIOPin(CAN_x);
+    CAN_ConfigGPIOPin(CAN_Val.CAN_n);
 
     // Enter CAN Initialize mode and wait for ACK
-    CAN_REQUEST_INITIALIZED_MODE(CAN_x);
-    while(!CAN_GET_INITIALIZED_MODE(CAN_x));
+    CAN_REQUEST_INITIALIZED_MODE(CAN_Val.CAN_n);
+    while(!CAN_GET_INITIALIZED_MODE(CAN_Val.CAN_n));
 
     //Exit Sleepmode
-    CAN_EXIT_SLEEP_MODE(CAN_x);
-    while(CAN_GET_SLEEP_MODE(CAN_x));
+    CAN_EXIT_SLEEP_MODE(CAN_Val.CAN_n);
+    while(CAN_GET_SLEEP_MODE(CAN_Val.CAN_n));
 
     // Config baudrate for CANx
 #if !defined(CAN_SELF_CONFIG_BAUDRATE)
-    CAN_BaudrateConfig(CAN_x, Baudrate);
+    CAN_BaudrateConfig(CAN_Val.CAN_n, CAN_Val.Baudrate);
 #else
-    CAN_BaudrateConfig(CAN_x, Prescaler, TimeSegment1, TimeSegment2, SJW);
+    CAN_BaudrateConfig(CAN_Val.CAN_n, CAN_Val.Prescaler, CAN_Val.TimeSegment1, CAN_Val.TimeSegment2, CAN_Val.SJW);
 #endif
     // Config Transmit mailbox
-    CAN_MailboxTransmitConfig(CAN_x, Mailbox, TX_ID, TX_DataLenght);
+    CAN_MailboxTransmitConfig(CAN_Val.CAN_n, CAN_Val.Mailbox, CAN_Val.TX_ID, CAN_Val.TX_DataLength);
 
     // Config Filter message data receive
-    CAN_MessageFilterConfig(CAN_x, FilterNumber, FilterMode, ScaleMode, RX_ID, ExtraInfor);
+    CAN_MessageFilterConfig(CAN_Val.CAN_n, CAN_Val.FilterNumber, CAN_Val.FilterMode, CAN_Val.ScaleMode, CAN_Val.RX_ID, CAN_Val.ExtraInfor);
 
     // Exit Initialize mode
-    CAN_EXIT_INITIALIZED_MODE(CAN_x);
-    while(CAN_GET_INITIALIZED_MODE(CAN_x));
+    CAN_EXIT_INITIALIZED_MODE(CAN_Val.CAN_n);
+    while(CAN_GET_INITIALIZED_MODE(CAN_Val.CAN_n));
 
 }
 

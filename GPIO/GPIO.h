@@ -1,7 +1,7 @@
 /**
  * @file GPIO.h
  * @author Nguyen Dinh Thuan (thuan.nd.167@gmail.com)
- * @brief Some declaration for GPIO(General Purpose Input/Output) of STM32F407VGTx (ARMCortex M4)
+ * @brief Some declaration for GPIO(General Purpose Input/Output) of STM32F4xx (ARMCortex M4)
  * @date 2024-07-10
  * 
  */

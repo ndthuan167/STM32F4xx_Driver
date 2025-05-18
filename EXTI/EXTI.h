@@ -1,7 +1,7 @@
 /**
  * @file EXTI.h
  * @author Nguyen Dinh Thuan (thuan.nd.167@gmail.com)
- * @brief Some declaration for EXTI(External interrupt) of STM32F407VGTx (ARMCortex M4)
+ * @brief Some declaration for EXTI(External interrupt) of STM32F4xx (ARMCortex M4)
  * @date 2024-07-12
  *
  */
@@ -55,6 +55,15 @@ typedef struct
     volatile uint32_t EXTI_SWIER;
     volatile uint32_t EXTI_PR;
 } EXTIx;
+
+typedef struct
+{
+    uint8_t EXTI_port; // EXTIx_PA_PIN -> EXTIx_PK_PIN
+    uint8_t EXTI_line; // EXTI_LINE_0 -> EXTI_LINE_22
+    uint8_t mask_it;   // NOT_MASKED(1), MASKED(0)
+    uint8_t mask_event; // NOT_MASKED(1), MASKED(0)
+    uint8_t trigger_type; // RISING_TRIGGER(0), FALLING_TRIGGER(1)
+} EXTI_Config_Variables;
 
 /*******************************************************************************
  * ENUM DEFINITION
@@ -170,7 +179,7 @@ void SYSCFG_ConfigPortEXTI(uint8_t port, uint8_t EXTI_line);
 uint8_t SYSCFG_GetStatusPortEXTI(uint8_t EXTI_line);
 
 // EXTI
-void EXTI_Configuration(uint8_t EXTI_port,uint8_t EXTI_line, uint8_t mask_it, uint8_t mask_event, uint8_t trigger_type);
+void EXTI_Configuration(EXTI_Config_Variables EXTI_val);
 void EXTI_SettingMaskInterrupt(uint8_t EXTI_line, uint8_t mask);
 uint8_t EXTI_GetValueMaskInterrupt(uint8_t EXTI_line);
 void EXTI_SettingMaskEventRequest(uint8_t EXTI_line, uint8_t mask);

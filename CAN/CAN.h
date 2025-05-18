@@ -76,6 +76,25 @@ typedef struct
     FilterID FxR1_2[28]; // x: 0 -> 27
 } CANx;
 
+typedef struct
+{
+    CANx *CAN_n;
+    uint8_t Baudrate;
+    uint8_t Prescaler;
+    uint8_t TimeSegment1;
+    uint8_t TimeSegment2;
+    uint8_t SJW;
+    uint8_t Mailbox;
+    uint8_t TX_ID;
+    uint8_t TX_DataLength;
+    uint8_t FilterNumber;
+    uint8_t FilterMode;
+    uint8_t ScaleMode;
+    uint32_t RX_ID;
+    uint32_t ExtraInfor;
+} CAN_Config_Variables;
+
+
 /*************************************************************************************
 * CAN CONTROL AND STATUS REGISTER DEFINITION
 **************************************************************************************/
@@ -224,15 +243,7 @@ void CAN_BaudrateConfig(CANx *CAN_x, uint16_t Prescaler, uint8_t TimeSegment1, u
 void CAN_MessageFilterConfig(CANx *CAN_x, uint8_t FilterNumber, uint8_t FilterMode, uint8_t Scale, uint32_t ID, uint32_t ExtraInfor);
 void CAN_MailboxTransmitConfig(CANx *CAN_x, uint8_t Mailbox, uint32_t ID, uint8_t DataLength);
 
-#if !defined(CAN_SELF_CONFIG_BAUDRATE)
-void CAN_Configuration(CANx *CAN_x, uint32_t Baudrate,    // baudrate
-                        uint8_t Mailbox, uint32_t TX_ID, uint8_t TX_DataLenght,                                     // TX mailbox
-                        uint8_t FilterNumber, uint8_t FilterMode, uint8_t ScaleMode, uint32_t RX_ID, uint32_t ExtraInfor);  // RX filter message
-#else
-void CAN_Configuration(CANx *CAN_x, uint32_t Prescaler, uint8_t TimeSegment1, uint8_t TimeSegment2, uint8_t SJW,    // baudrate
-                        uint8_t Mailbox, uint32_t TX_ID, uint8_t TX_DataLenght,                                     // TX mailbox
-                        uint8_t FilterNumber, uint8_t FilterMode, uint8_t ScaleMode, uint32_t RX_ID, uint32_t ExtraInfor);  // RX filter message
-#endif
+void CAN_Configuration(CAN_Config_Variables CAN_Val);
 
 void CAN_Transmit_Data(CANx *CAN_x, uint8_t mailbox, uint8_t data);
 uint8_t CAN_Receive_Data(CANx *CAN_x, uint8_t mailbox, uint8_t FIFOx);

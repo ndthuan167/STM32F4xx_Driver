@@ -1,7 +1,7 @@
 /**
  * @file EXTI.c
  * @author Nguyen Dinh Thuan (thuan.nd.167@gmail.com)
- * @brief Configuration for External interrupt (EXTI) of STM32F407VGTx (ARMCortex M4)
+ * @brief Configuration for External interrupt (EXTI) of STM32F4xx (ARMCortex M4)
  * @date 2024-07-13
  *
  */
@@ -143,7 +143,7 @@ uint8_t EXTI_GetValueMaskEventRequest(uint8_t EXTI_line)
 /**
 *******************************************************************************
 * @ Name : EXTI_Configuration
-* @ Parameters: uint8_t EXTI_port,uint8_t EXTI_line, uint8_t mask_it, uint8_t mask_event, uint8_t trigger_type
+* @ Parameters: EXTI_Config_Variables EXTI_val
 * @ Registers : EXTI_RTSR, EXTI_FTSR, EXTI_IMR, EXTI_EMR, EXTI_PR
 * @ Descriptions :
 *		- Configure EXTI for EXTI_line
@@ -155,23 +155,23 @@ uint8_t EXTI_GetValueMaskEventRequest(uint8_t EXTI_line)
 * @ date : 2024-07-13
 *******************************************************************************
 */
-void EXTI_Configuration(uint8_t EXTI_port,uint8_t EXTI_line, uint8_t mask_it, uint8_t mask_event, uint8_t trigger_type)
+void EXTI_Configuration(EXTI_Config_Variables EXTI_val)
 {
-    SYSCFG_ConfigPortEXTI(EXTI_port, EXTI_line);     // enable EXTI interrupt line
+    SYSCFG_ConfigPortEXTI(EXTI_val.EXTI_port, EXTI_val.EXTI_line);     // enable EXTI interrupt line
 
-    if (trigger_type == RISING_TRIGGER)
+    if (EXTI_val.trigger_type == RISING_TRIGGER)
     {
-        EXTI_SET_RTSR(_EXTI, EXTI_line, ENABLE);
-        EXTI_SET_FTRS(_EXTI, EXTI_line, DISABLE);
+        EXTI_SET_RTSR(_EXTI, EXTI_val.EXTI_line, ENABLE);
+        EXTI_SET_FTRS(_EXTI, EXTI_val.EXTI_line, DISABLE);
     }
-    else if (trigger_type == FALLING_TRIGGER)
+    else if (EXTI_val.trigger_type == FALLING_TRIGGER)
     {
-        EXTI_SET_RTSR(_EXTI, EXTI_line, DISABLE);
-        EXTI_SET_FTRS(_EXTI, EXTI_line, ENABLE);
+        EXTI_SET_RTSR(_EXTI, EXTI_val.EXTI_line, DISABLE);
+        EXTI_SET_FTRS(_EXTI, EXTI_val.EXTI_line, ENABLE);
     }
 
-    EXTI_SettingMaskInterrupt(EXTI_line, mask_it);       // enable interrupt request in line
-    EXTI_SettingMaskEventRequest(EXTI_line, mask_event);    
+    EXTI_SettingMaskInterrupt(EXTI_val.EXTI_line, EXTI_val.mask_it);       // enable interrupt request in line
+    EXTI_SettingMaskEventRequest(EXTI_val.EXTI_line, EXTI_val.mask_event);    
 }
 
 /**

@@ -1,7 +1,7 @@
 /**
  * @file USART.h
  * @author Nguyen Dinh Thuan (thuan.nd.167@gmail.com)
- * @brief Some declaration for USART(Universal Synchronous/Asynchronous Receiver Transmiter) of STM32F407VGTx (ARMCortex M4)
+ * @brief Some declaration for USART(Universal Synchronous/Asynchronous Receiver Transmiter) of STM32F4xx (ARMCortex M4)
  * @date 2024-09-12
  * 
  */
@@ -40,6 +40,15 @@ typedef struct {
     uint32_t CR3;      // Control Register 3
     uint32_t GTPR;     // Guard Time and Prescaler Register
 } USARTn;
+
+typedef struct {
+    USARTn *usart_x;
+    uint32_t baudrate;         // 9600, 19200, 115200
+    uint8_t wordlength;        // 8, 9
+    uint8_t over8;             // 0, 1
+    uint8_t paritycontrol;     // 0, 1
+    uint8_t paritytype;        // 0, 1
+} USART_Config_Variables;
 
 extern volatile uint8_t value_re_IT;
 
@@ -129,9 +138,10 @@ extern volatile uint8_t value_re_IT;
 *******************************************************************************/
 
 uint16_t USART_BaudrateCalculator(uint32_t baudrate, float clockfrequency, uint8_t over8);
-void USART_Configuration(USARTn* usartn, uint32_t baudrate, uint8_t wordlength, uint8_t over8, uint8_t paritycontrol, uint8_t paritytype);
+void USART_Configuration(USART_Config_Variables USART_Val);
 void USART_SendData(USARTn *usartn,volatile uint8_t *pData, uint16_t Size);
 unsigned char USART_ReceiveData(USARTn* usartn);
-
+void USART_SendData_DMA(USARTn *usart_n, uint8_t *pData, uint16_t Size);
+unsigned char USART_ReceiveData_DMA(USARTn *usartn);
 void USART_ReceiverDataInterruptEnable(USARTn* usartn);
 void USART_TransmiterDataInterruptEnable(USARTn* usartn);

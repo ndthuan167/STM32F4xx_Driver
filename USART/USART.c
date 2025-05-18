@@ -1,7 +1,7 @@
 /**
  * @file USART.c
  * @author Nguyen Dinh Thuan (thuan.nd.167@gmail.com)
- * @brief Configuration for USART of STM32F407VGTx (ARMCortex M4)
+ * @brief Configuration for USART of STM32F4xx (ARMCortex M4)
  * @date 2024-09-11
  */
 
@@ -13,6 +13,7 @@
 #include "math.h"
 #include "../GPIO/GPIO.h"
 #include "../RCC/RCC.h"
+#include "../DMA/DMA.h"
 
 /******************************************************************************
  * Definition
@@ -46,7 +47,7 @@ uint16_t USART_BaudrateCalculator(uint32_t baudrate, float clockfrequency, uint8
 /**
 *******************************************************************************
 * @ Name : USART_Configuration
-* @ Parameters: USARTn* usartn, uint32_t baudrate, uint8_t wordlength, uint8_t over8, uint8_t paritycontrol, uint8_t paritytype
+* @ Parameters: USART_Config_Variables USART_Val
 * @ Registers : SR, BRR, CR1
 * @ Descriptions :
 *		- Configure the USART Baud Rate, Word Length, Parity Control and Parity Type and oversampling type.
@@ -63,9 +64,9 @@ uint16_t USART_BaudrateCalculator(uint32_t baudrate, float clockfrequency, uint8
 * @ date : 2024-09-12
 *******************************************************************************
 */
-void USART_Configuration(USARTn *usartn, uint32_t baudrate, uint8_t wordlength, uint8_t over8, uint8_t paritycontrol, uint8_t paritytype)
+void USART_Configuration(USART_Config_Variables USART_Val)
 {
-    if (usartn == (USARTn *)ADDRESS_USART_1)
+    if (USART_Val.usart_x == (USARTn *)ADDRESS_USART_1)
     {
         RCC_EnablePeripheralClock(CLOCK_USART1);
         RCC_EnablePeripheralClock(CLOCK_GPIO_A);
@@ -74,7 +75,7 @@ void USART_Configuration(USARTn *usartn, uint32_t baudrate, uint8_t wordlength, 
         GPIO_ConfigAlternateFunc(gpio_a, GPIO_PIN9, AF7);
         GPIO_ConfigAlternateFunc(gpio_a, GPIO_PIN10, AF7);
     }
-    else if (usartn == (USARTn *)ADDRESS_USART_2)
+    else if (USART_Val.usart_x == (USARTn *)ADDRESS_USART_2)
     {
         RCC_EnablePeripheralClock(CLOCK_USART2);
         RCC_EnablePeripheralClock(CLOCK_GPIO_D);
@@ -83,7 +84,7 @@ void USART_Configuration(USARTn *usartn, uint32_t baudrate, uint8_t wordlength, 
         GPIO_ConfigAlternateFunc(gpio_d, GPIO_PIN5, AF7);
         GPIO_ConfigAlternateFunc(gpio_d, GPIO_PIN6, AF7);
     }
-    else if (usartn == (USARTn *)ADDRESS_USART_3)
+    else if (USART_Val.usart_x == (USARTn *)ADDRESS_USART_3)
     {
         RCC_EnablePeripheralClock(CLOCK_USART3);
         RCC_EnablePeripheralClock(CLOCK_GPIO_D);
@@ -92,7 +93,7 @@ void USART_Configuration(USARTn *usartn, uint32_t baudrate, uint8_t wordlength, 
         GPIO_ConfigAlternateFunc(gpio_d, GPIO_PIN8, AF7);
         GPIO_ConfigAlternateFunc(gpio_d, GPIO_PIN9, AF7);
     }
-    else if (usartn == (USARTn *)ADDRESS_USART_6)
+    else if (USART_Val.usart_x == (USARTn *)ADDRESS_USART_6)
     {
         RCC_EnablePeripheralClock(CLOCK_USART6);
         RCC_EnablePeripheralClock(CLOCK_GPIO_C);
@@ -101,7 +102,7 @@ void USART_Configuration(USARTn *usartn, uint32_t baudrate, uint8_t wordlength, 
         GPIO_ConfigAlternateFunc(gpio_c, GPIO_PIN6, AF8);
         GPIO_ConfigAlternateFunc(gpio_c, GPIO_PIN7, AF8);
     }
-    else if (usartn == (USARTn *)ADDRESS_UART_4)
+    else if (USART_Val.usart_x == (USARTn *)ADDRESS_UART_4)
     {
         RCC_EnablePeripheralClock(CLOCK_UART4);
         RCC_EnablePeripheralClock(CLOCK_GPIO_A);
@@ -110,7 +111,7 @@ void USART_Configuration(USARTn *usartn, uint32_t baudrate, uint8_t wordlength, 
         GPIO_ConfigAlternateFunc(gpio_a, GPIO_PIN0, AF8);
         GPIO_ConfigAlternateFunc(gpio_a, GPIO_PIN1, AF8);
     }
-    else if (usartn == (USARTn *)ADDRESS_UART_5)
+    else if (USART_Val.usart_x == (USARTn *)ADDRESS_UART_5)
     {
         RCC_EnablePeripheralClock(CLOCK_UART5);
         RCC_EnablePeripheralClock(CLOCK_GPIO_C);
@@ -121,13 +122,13 @@ void USART_Configuration(USARTn *usartn, uint32_t baudrate, uint8_t wordlength, 
         GPIO_ConfigAlternateFunc(gpio_d, GPIO_PIN2, AF8);
     }
 
-    USART_SET_OVERSAMPLING_MODE(usartn, over8);
-    uint16_t baudrate_cal = USART_BaudrateCalculator(baudrate, 16000000, over8);
-    USART_SET_BAUDRATE(usartn, baudrate_cal);
-    USART_SET_STOP_BIT(usartn, STOP_BIT_1);
-    USART_TRANSMITER_ENABLE(usartn);
-    USART_RECEIVER_ENABLE(usartn);
-	USART_ENABLE_USART(usartn);
+    USART_SET_OVERSAMPLING_MODE(USART_Val.usart_x, USART_Val.over8);
+    uint16_t baudrate_cal = USART_BaudrateCalculator(USART_Val.baudrate, 16000000, USART_Val.over8);
+    USART_SET_BAUDRATE(USART_Val.usart_x, baudrate_cal);
+    USART_SET_STOP_BIT(USART_Val.usart_x, STOP_BIT_1);
+    USART_TRANSMITER_ENABLE(USART_Val.usart_x);
+    USART_RECEIVER_ENABLE(USART_Val.usart_x);
+	USART_ENABLE_USART(USART_Val.usart_x);
     
 }
 
@@ -163,6 +164,55 @@ void USART_SendData(USARTn *usartn, volatile uint8_t *pData, uint16_t Size)
 
 /**
 *******************************************************************************
+* @ Name : USART_SendData_DMA
+* @ Parameters: USARTn *usart_n, uint8_t *pData, uint16_t Size
+* @ Registers : DMA registers, DR
+* @ Descriptions :
+*		- Send data via usart by using DMA confirguration:
+*            + Set DMA direction: Memory to Peripheral
+*            + Set Peripheral address: usartn->DR
+*            + Set Memory address: pData
+*            + Set Number of data: Size
+* @ Return value : void
+* @ author : Nguyen Dinh Thuan(thuan.nd.167@gmail.com)
+* @ date : 2025-05-17
+*******************************************************************************
+*/
+void USART_SendData_DMA(USARTn *usart_n, uint8_t *pData, uint16_t Size)
+{
+    DMA_Variables DMA_val;
+    if(usart_n == (USARTn *)ADDRESS_USART_1)
+        DMA_val.Peripheral = USART1_TX;
+    else if(usart_n == (USARTn *)ADDRESS_USART_2)
+        DMA_val.Peripheral = USART2_TX;
+    else if(usart_n == (USARTn *)ADDRESS_USART_3)
+        DMA_val.Peripheral = USART3_TX;
+    else if(usart_n == (USARTn *)ADDRESS_USART_6)
+        DMA_val.Peripheral = USART6_TX;
+    else if(usart_n == (USARTn *)ADDRESS_UART_4)
+        DMA_val.Peripheral = UART4_TX;
+    else if(usart_n == (USARTn *)ADDRESS_UART_5)
+        DMA_val.Peripheral = UART5_TX;
+
+    DMA_val.Direction = DIR_MEM2PHE;
+    DMA_val.MemDataSize = PDATA_SIZE_BYTE;
+    DMA_val.PheDataSize = PDATA_SIZE_BYTE;
+    DMA_val.PriorityLevel = PL_HIGH;
+    DMA_val.NumOfData = Size;
+    DMA_val.Memory0Address = (uint32_t)pData;
+    DMA_val.Memory1Address = (uint32_t)pData;
+    DMA_val.PeripheralAddress = (uint32_t)&usart_n->DR;
+    DMA_val.FIFOEnable = DISABLE;
+    DMA_Configuration(DMA_val);
+    
+    DMA_Request rq = GetStreamAndChannelForPeripheral(DMA_val.Peripheral);
+    DMA_TRANSFER_COMPLETE_IRQ_ENABLE(rq.DMAn, rq.StreamX);
+    DMA_EnableStream(DMA_val);
+
+}
+
+/**
+*******************************************************************************
 * @ Name : USART_ReceiveData
 * @ Parameters: USARTn* usartn
 * @ Registers : DR
@@ -182,6 +232,61 @@ unsigned char USART_ReceiveData(USARTn *usartn)
 }
 
 
+/**
+*******************************************************************************
+* @ Name : USART_ReceiveData_DMA
+* @ Parameters: USARTn *usart_n
+* @ Registers : DMA registers, DR
+* @ Descriptions :
+*		- Receive data via usart by using DMA confirguration:
+*            + Set DMA direction: Peripheral to Memory
+*            + Set Peripheral address: usartn->DR
+*            + Set Memory address: data_receive
+*            + Set Number of data: 1
+*            + Enable transfer complete interrupt
+* @ Return value : void
+* @ author : Nguyen Dinh Thuan(thuan.nd.167@gmail.com)
+* @ date : 2025-05-17
+*******************************************************************************
+*/
+unsigned char USART_ReceiveData_DMA(USARTn *usartn)
+{
+    DMA_Variables DMA_val;
+    unsigned char data_receive;
+
+    if (usartn == (USARTn *)ADDRESS_USART_1)
+        DMA_val.Peripheral = USART1_RX;
+    else if (usartn == (USARTn *)ADDRESS_USART_2)
+        DMA_val.Peripheral = USART2_RX;
+    else if (usartn == (USARTn *)ADDRESS_USART_3)
+        DMA_val.Peripheral = USART3_RX;
+    else if (usartn == (USARTn *)ADDRESS_USART_6)
+        DMA_val.Peripheral = USART6_RX;
+    else if (usartn == (USARTn *)ADDRESS_UART_4)
+        DMA_val.Peripheral = UART4_RX;
+    else if (usartn == (USARTn *)ADDRESS_UART_5)
+        DMA_val.Peripheral = UART5_RX;
+
+    DMA_val.Direction = DIR_PHE2MEM;
+    DMA_val.MemDataSize = PDATA_SIZE_BYTE;
+    DMA_val.PheDataSize = PDATA_SIZE_BYTE;
+    DMA_val.PriorityLevel = PL_HIGH;
+    DMA_val.NumOfData = 1;
+    DMA_val.Memory0Address = (uint32_t)&data_receive;
+    DMA_val.Memory1Address = (uint32_t)&data_receive;
+    DMA_val.PeripheralAddress = (uint32_t)&usartn->DR;
+    DMA_val.FIFOEnable = DISABLE;
+    DMA_Configuration(DMA_val);
+    DMA_EnableStream(DMA_val);
+
+    DMA_Request rq = GetStreamAndChannelForPeripheral(DMA_val.Peripheral);
+    DMA_TRANSFER_COMPLETE_IRQ_ENABLE(rq.DMAn, rq.StreamX);
+    while(!DMA_Get_IRQ_Flag(rq.DMAn, rq.StreamX, DMA_TRANSFER_COMPLETE_IRQ_FLAG))
+    {
+    };
+
+    return data_receive;
+}
 /**
 *******************************************************************************
 * @ Name : USART_ReceiverDataInterruptEnable

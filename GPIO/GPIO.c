@@ -1,7 +1,7 @@
 /**
  * @file GPIO.c
  * @author Nguyen Dinh Thuan (thuan.nd.167@gmail.com)
- * @brief Configuration for GPIO of STM32F407VGTx (ARMCortex M4)
+ * @brief Configuration for GPIO of STM32F4xx (ARMCortex M4)
  * @date 2024-07-07
  *
  */
@@ -314,10 +314,6 @@ void GPIO_EnableClock(GPIOn * gpio_x)
         RCC_EnablePeripheralClock(CLOCK_GPIO_H);
     else if(gpio_x == (GPIOn *)ADDRESS_GPIO_I)
         RCC_EnablePeripheralClock(CLOCK_GPIO_I);
-    else if(gpio_x == (GPIOn *)ADDRESS_GPIO_J)
-        RCC_EnablePeripheralClock(CLOCK_GPIO_J);
-    else if(gpio_x == (GPIOn *)ADDRESS_GPIO_K)
-        RCC_EnablePeripheralClock(CLOCK_GPIO_K);
     else
         return;
 }

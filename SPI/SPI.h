@@ -1,7 +1,7 @@
 /**
  * @file SPI.h
  * @author Nguyen Dinh Thuan (thuan.nd.167@gmail.com)
- * @brief Some declaration for SPI configuration of STM32F407VGTx (ARMCortex M4)
+ * @brief Some declaration for SPI configuration of STM32F4xx (ARMCortex M4)
  * @date 2025-03-03
  *
  */
@@ -37,6 +37,19 @@ typedef struct
     uint32_t I2SCFGR; // I2S Configuration Register
     uint32_t I2SPR; // I2S Prescaler Register
 }SPIn;
+
+typedef struct
+{
+    SPIn *spi_x;
+    uint8_t spi_mode;         // SPI_MODE_0, SPI_MODE_1, SPI_MODE_2, SPI_MODE_3
+    uint8_t sampling_type;    // SECOND_CLOCK_IDLE, SECOND_CLOCK_NO_IDLE, FIRST_CLOCK_IDLE, FIRST_CLOCK_NO_IDLE
+    uint8_t clock_prescaler;    // 2, 4, 8, 16, 32, 64, 128, 256
+    uint8_t data_read_fr;    // MSB_FIRST, LSB_FIRST
+    uint8_t receive_mode;     // FULL_DUPLEX_MODE, RECEIVE_ONLY_MODE
+    uint8_t data_fr;         // DATA_FRAME_8_BITS, DATA_FRAME_16_BITS
+    uint8_t slave_mode_type; // SOFTWARE_SLAVE_SELECT, HARDWARE_SLAVE_SELECT, NOTHING
+} SPI_Config_Variables;
+
 
 extern volatile uint8_t value_re_IT_spi;
 
@@ -153,15 +166,15 @@ extern volatile uint8_t value_re_IT_spi;
 /*******************************************************************************
 * FUNCTIONS DEFINITION
 *******************************************************************************/
-void SPI_Configuration(SPIn *spi_n,uint8_t spi_mode, uint8_t sampling_type,
-    uint8_t clock_prescaler, uint8_t data_read_fr, 
-    uint8_t receive_mode, uint8_t data_fr, uint8_t slave_mode_type);
+void SPI_Configuration(SPI_Config_Variables SPI_Val);
 void SPI_Transmiter(SPIn * spi_n, uint8_t* pData, uint8_t Size);
+void SPI_Transmiter_DMA(SPIn * spi_n, uint8_t* pData, uint8_t Size);
 void SPI_ConfigGPIOPinForSPI(SPIn * spi_n);
 
 void SPI_SlaveSelect(SPIn *spi_n);
 void SPI_SlaveDisSelect(SPIn *spi_n);
 void SPI_ReceiveData(SPIn* spi_n, uint8_t* pData, uint8_t Size);
+uint8_t SPI_ReceiveData_DMA(SPIn *spi_n);
 
 void SPI_TransmitDataInterruptEnable(SPIn *spi_n);
 void SPI_ReceiverDataInterruptEnable(SPIn *spi_n);

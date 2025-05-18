@@ -1,7 +1,7 @@
 /**
  * @file I2C.c
  * @author Nguyen Dinh Thuan (thuan.nd.167@gmail.com)
- * @brief Configuration for I2C (Inter-Integrated Circuit) of STM32F407VGTx (ARMCortex M4)
+ * @brief Configuration for I2C (Inter-Integrated Circuit) of STM32F4xx (ARMCortex M4)
  * @date 2025-03-07
  *
  */
@@ -13,6 +13,7 @@
 #include "I2C.h"
 #include "../RCC/RCC.h"
 #include "../GPIO/GPIO.h"
+#include "../DMA/DMA.h"
 
 /******************************************************************************
  * Variables definition
@@ -184,7 +185,7 @@ void I2C_ConfigI2CClock(I2C* i2c_x, uint8_t i2c_mode, uint32_t peripheral_clock,
 /**
 *******************************************************************************
 * @ Name : I2C_Configuration
-* @ Parameters: I2C *i2c_x ,uint8_t i2c_mode, uint32_t peripheral_clock, uint8_t scl_clock, uint8_t duty_type
+* @ Parameters: I2C_Config_Variables I2C_Val
 * @ Registers : 
 * @ Descriptions :
 *		- Config I2C (Config GPIO, Clock,...)
@@ -204,15 +205,15 @@ void I2C_ConfigI2CClock(I2C* i2c_x, uint8_t i2c_mode, uint32_t peripheral_clock,
 * @ date : 2025-03-07
 *******************************************************************************
 */
-void I2C_Configuration(I2C *i2c_x ,uint8_t i2c_mode, uint32_t peripheral_clock, uint32_t scl_clock, uint8_t duty_type)
+void I2C_Configuration(I2C_Config_Variables I2C_Val)
 {
-    I2C_ConfigGPIOPin(i2c_x);
+    I2C_ConfigGPIOPin(I2C_Val.i2c_x);
     // Set and reset SWRST bit to clear all configuration of I2C first and re-config.
-    SWRST_I2C(i2c_x);
-    SWRST_RESET_I2C(i2c_x);
+    SWRST_I2C(I2C_Val.i2c_x);
+    SWRST_RESET_I2C(I2C_Val.i2c_x);
 
-    I2C_ConfigI2CClock(i2c_x, i2c_mode, peripheral_clock, scl_clock, duty_type); // set clock speed on SCL line include config clock in bus)
-    ENABLE_I2C(i2c_x);
+    I2C_ConfigI2CClock(I2C_Val.i2c_x, I2C_Val.i2c_mode, I2C_Val.peripheral_clock, I2C_Val.scl_clock, I2C_Val.duty_type); // set clock speed on SCL line include config clock in bus)
+    ENABLE_I2C(I2C_Val.i2c_x);
 }
 
 /**
@@ -373,4 +374,98 @@ void I2C_TransmitData(I2C *i2c_x, uint8_t slave_address, uint8_t *data, uint8_t 
     // STOP_I2C(i2c_x);
 }
 
+/**
+*******************************************************************************
+* @ Name : I2C_TransmitData_DMA
+* @ Parameters: I2C *i2c_x, uint8_t slave_address, uint8_t *pData, uint8_t NumOfBytes
+* @ Registers : DMA registers, DR
+* @ Descriptions :
+*		- Send data via i2c by using DMA confirguration:
+*            + Set DMA direction: Memory to Peripheral
+*            + Set Peripheral address: i2c_x->DR
+*            + Set Memory0 address: slave_address
+*            + Set Memory1 address: pData
+*            + Set Number of data: Size
+* @ Return value : void
+* @ author : Nguyen Dinh Thuan(thuan.nd.167@gmail.com)
+* @ date : 2025-05-17
+*******************************************************************************
+*/
+void I2C_TransmitData_DMA(I2C *i2c_x, uint8_t slave_address, uint8_t *pData, uint8_t NumOfBytes)
+{
+    DMA_Variables DMA_val;
+
+    if(i2c_x == _I2C1)
+        DMA_val.Peripheral = I2C1_TX;
+    else if(i2c_x == _I2C2)
+        DMA_val.Peripheral = I2C2_TX;
+    else if(i2c_x == _I2C3)
+        DMA_val.Peripheral = I2C3_TX;
+
+        DMA_val.Direction = DIR_MEM2PHE;
+        DMA_val.MemDataSize = PDATA_SIZE_WORD;
+        DMA_val.PheDataSize = PDATA_SIZE_WORD;
+        DMA_val.PriorityLevel = PL_HIGH;
+        DMA_val.NumOfData = NumOfBytes;
+        DMA_val.Memory0Address = (uint32_t)slave_address;
+        DMA_val.Memory1Address = (uint32_t)pData;
+        DMA_val.PeripheralAddress = (uint32_t)&i2c_x->DR;
+        DMA_val.FIFOEnable = DISABLE;
+        DMA_Configuration(DMA_val);
+    
+        DMA_Request rq = GetStreamAndChannelForPeripheral(DMA_val.Peripheral);
+        DMA_TRANSFER_COMPLETE_IRQ_ENABLE(rq.DMAn, rq.StreamX);
+        DMA_EnableStream(DMA_val);    
+}
+
+/**
+*******************************************************************************
+* @ Name : I2C_ReceiveData_DMA
+* @ Parameters: I2C *i2c_x
+* @ Registers : DMA registers, DR
+* @ Descriptions :
+*		- Receive data via i2c by using DMA confirguration:
+*            + Set DMA direction: Peripheral to Memory
+*            + Set Peripheral address: spi_n->DR
+*            + Set Memory address: data_receive
+*            + Set Number of data: 1
+*            + Enable transfer complete interrupt
+* @ Return value : void
+* @ author : Nguyen Dinh Thuan(thuan.nd.167@gmail.com)
+* @ date : 2025-05-17
+*******************************************************************************
+*/
+uint32_t I2C_ReceiveData_DMA(I2C *i2c_x)
+{
+    DMA_Variables DMA_val;
+
+    uint32_t data_receive;
+
+    if(i2c_x == _I2C1)
+        DMA_val.Peripheral = I2C1_RX;
+    else if(i2c_x == _I2C2)
+        DMA_val.Peripheral = I2C2_RX;
+    else if(i2c_x == _I2C3)
+        DMA_val.Peripheral = I2C3_RX;
+
+    DMA_val.Direction = DIR_PHE2MEM;
+    DMA_val.MemDataSize = PDATA_SIZE_WORD;
+    DMA_val.PheDataSize = PDATA_SIZE_WORD;
+    DMA_val.PriorityLevel = PL_HIGH;
+    DMA_val.NumOfData = 1;
+    DMA_val.Memory0Address = (uint32_t)&data_receive;
+    DMA_val.Memory1Address = (uint32_t)&data_receive;
+    DMA_val.PeripheralAddress = (uint32_t)&i2c_x->DR;
+    DMA_val.FIFOEnable = DISABLE;
+    DMA_Configuration(DMA_val);
+    DMA_EnableStream(DMA_val);
+
+    DMA_Request rq = GetStreamAndChannelForPeripheral(DMA_val.Peripheral);
+    DMA_TRANSFER_COMPLETE_IRQ_ENABLE(rq.DMAn, rq.StreamX);
+    while(!DMA_Get_IRQ_Flag(rq.DMAn, rq.StreamX, DMA_TRANSFER_COMPLETE_IRQ_FLAG))
+    {
+    };
+
+    return data_receive;
+}
 
