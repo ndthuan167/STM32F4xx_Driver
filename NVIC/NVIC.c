@@ -210,5 +210,4 @@ void NVIC_Configuration(NVIC_Config_Variables NVIC_val)
     {
         NVIC_ClearInterruptEnable(NVIC_val.IRQNumber);
     }
-    // NVIC_ClearPendingInterrupt(IRQNumber);
 }
